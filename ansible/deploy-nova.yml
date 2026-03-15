@@ -1,0 +1,52 @@
+---
+# ── Playbook 2: Deploy NOVA AI Store ─────────────
+# Run with: ansible-playbook -i inventory.ini deploy-nova.yml
+# What it does: pulls and runs the NOVA Docker container
+
+- name: Deploy NOVA AI Store
+  hosts: nova_servers
+  become: true
+
+  vars:
+    app_name: nova-app
+    image_name: nova-ai-store
+    image_tag: "1.0.0"
+    app_port: 8080
+
+  tasks:
+
+    - name: Stop existing NOVA container
+      docker_container:
+        name: "{{ app_name }}"
+        state: stopped
+      ignore_errors: yes
+
+    - name: Remove existing NOVA container
+      docker_container:
+        name: "{{ app_name }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Start NOVA AI Store container
+      docker_container:
+        name: "{{ app_name }}"
+        image: "{{ image_name }}:{{ image_tag }}"
+        state: started
+        restart_policy: unless-stopped
+        ports:
+          - "{{ app_port }}:8080"
+        env:
+          ANTHROPIC_API_KEY: "{{ anthropic_api_key }}"
+
+    - name: Wait for app to be healthy
+      uri:
+        url: "http://localhost:{{ app_port }}/api/health"
+        status_code: 200
+      register: health
+      retries: 10
+      delay: 5
+      until: health.status == 200
+
+    - name: Print success message
+      debug:
+        msg: "✅ NOVA AI Store deployed and healthy at port {{ app_port }}!"
