@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ============================================
+         PROJECT IDENTITY
+         Like "name", "version" in package.json
+    ============================================ -->
+    <groupId>com.nova</groupId>
+    <artifactId>nova-ai-store</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>NOVA AI Store</name>
+    <description>AI-powered coffee recommendation engine for Blue Tokai</description>
+
+    <!-- ============================================
+         SPRING BOOT PARENT
+         This is Maven's superpower — inherit 
+         pre-configured dependency versions from 
+         Spring Boot. No version conflicts.
+         Like "extends" in OOP.
+    ============================================ -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/>
+    </parent>
+
+    <!-- ============================================
+         PROPERTIES
+         Global variables used throughout this file
+    ============================================ -->
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- ============================================
+         DEPENDENCIES
+         Like "dependencies" in package.json
+         Spring Boot parent manages versions —
+         you only need to declare groupId + artifactId
+    ============================================ -->
+    <dependencies>
+
+        <!-- Spring Boot Web: gives you REST API + embedded Tomcat server -->
+        <!-- Like express in Node.js -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Data JPA: database ORM layer -->
+        <!-- Like mongoose/sequelize in Node.js -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL Driver: connects Java to your Postgres DB -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- HTTP Client: to call Claude AI API -->
+        <!-- Like axios/fetch in Node.js -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- Actuator: exposes /actuator/health, /actuator/metrics -->
+        <!-- Prometheus will scrape these endpoints -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Micrometer Prometheus: formats metrics for Prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- Lombok: reduces boilerplate Java code (auto-generates getters/setters) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Jackson: JSON parsing library (auto-included with web starter) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Test: JUnit testing framework -->
+        <!-- Like jest in Node.js -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- H2 In-Memory DB: for running tests without real PostgreSQL -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ============================================
+         BUILD PLUGINS
+         Maven plugins that run during build lifecycle
+    ============================================ -->
+    <build>
+        <plugins>
+
+            <!-- Spring Boot Maven Plugin: packages app as executable JAR -->
+            <!-- This is what makes "java -jar nova-ai-store.jar" work -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

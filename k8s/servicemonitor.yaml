@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: brewmind-ai-monitor
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: brewmind-ai
+  endpoints:
+  - port: http
+    path: /actuator/prometheus
+    interval: 15s

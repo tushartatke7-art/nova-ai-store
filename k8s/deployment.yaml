@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brewmind-ai
+  labels:
+    app: brewmind-ai
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: brewmind-ai
+  template:
+    metadata:
+      labels:
+        app: brewmind-ai
+    spec:
+      containers:
+      - name: brewmind-ai
+        image: brewmind-ai:1.0.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CLAUDE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: brewmind-secret
+              key: claude-api-key
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
