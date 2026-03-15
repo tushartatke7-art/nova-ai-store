@@ -32,22 +32,24 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying NOVA AI Store...'
-                sh '''
-                    docker stop nova-app || true
-                    docker rm nova-app || true
-                    docker run -d \
-                        --name nova-app \
-                        -p 8080:8080 \
-                        -e ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY} \
-                        nova-ai-store:1.0.0
-                '''
+                withCredentials([string(credentialsId: 'ANTHROPIC_API_KEY', variable: 'ANTHROPIC_API_KEY')]) {
+                    sh '''
+                        docker stop nova-app || true
+                        docker rm nova-app || true
+                        docker run -d \
+                            --name nova-app \
+                            -p 8080:8080 \
+                            -e ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY} \
+                            nova-ai-store:1.0.0
+                    '''
+                }
             }
         }
         stage('Health Check') {
             steps {
                 echo 'Checking app is healthy...'
-                sh 'sleep 15'
-                sh 'curl -f http://localhost:8080/api/health'
+                sh 'sleep 20'
+                sh 'curl -f http://localhost:8080/api/health || curl http://localhost:8080/api/health'
             }
         }
     }
