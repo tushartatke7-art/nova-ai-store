@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: brewmind-ai
+  name: nova-ai-store
   labels:
-    app: brewmind-ai
+    app: nova-ai-store
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: brewmind-ai
+      app: nova-ai-store
   template:
     metadata:
       labels:
-        app: brewmind-ai
+        app: nova-ai-store
     spec:
       containers:
-      - name: brewmind-ai
-        image: brewmind-ai:1.0.0
+      - name: nova-ai-store
+        image: nova-ai-store:1.0.0
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
         env:
-        - name: CLAUDE_API_KEY
+        - name: ANTHROPIC_API_KEY
           valueFrom:
             secretKeyRef:
-              name: brewmind-secret
-              key: claude-api-key
+              name: nova-secret
+              key: anthropic-api-key
         resources:
           requests:
             memory: "256Mi"

@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: brewmind-ai
+  repository: nova-ai-store
   tag: "1.0.0"
   pullPolicy: Never
 
@@ -20,4 +20,4 @@ resources:
     cpu: "500m"
 
 env:
-  claudeApiKey: ""
+  anthropicApiKey: ""

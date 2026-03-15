@@ -21,11 +21,11 @@ spec:
         ports:
         - containerPort: {{ .Values.service.targetPort }}
         env:
-        - name: CLAUDE_API_KEY
+        - name: ANTHROPIC_API_KEY
           valueFrom:
             secretKeyRef:
-              name: brewmind-secret
-              key: claude-api-key
+              name: nova-secret
+              key: anthropic-api-key
         resources:
           requests:
             memory: {{ .Values.resources.requests.memory }}
@@ -37,11 +37,11 @@ spec:
           httpGet:
             path: /api/health
             port: {{ .Values.service.targetPort }}
-          initialDelaySeconds: 90
+          initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /api/health
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 10
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 20
+          periodSeconds: 5
